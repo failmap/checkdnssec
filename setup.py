@@ -1,5 +1,6 @@
-from setuptools import find_packages, setup
 from subprocess import check_output
+
+from setuptools import find_packages, setup
 
 
 def version_from_git():
@@ -13,8 +14,8 @@ setup(
     version=version_from_git(),
     packages=find_packages(),
     install_requires=[
-      'dnspython',
-      'pycrypto',
+        'dnspython',
+        'pycrypto',
     ],
     entry_points={
         'console_scripts': [
