@@ -1,17 +1,19 @@
-import dns.name
-import dns.query
-import dns.dnssec
-import dns.message
-import dns.resolver
-import dns.rdatatype
 import sys
 from datetime import datetime
+
+import dns.dnssec
+import dns.message
+import dns.name
+import dns.query
+import dns.rdatatype
+import dns.resolver
 
 # Based on some of the code in;
 # https://stackoverflow.com/questions/26137036/programmatically-check-if-domains-are-dnssec-protected
 # https://stackoverflow.com/questions/5235569/using-the-dig-command-in-python
 # https://stackoverflow.com/questions/3898363/python-dns-resolver-set-specific-dns-server
 # http://www.dnspython.org/examples.html
+
 
 def get_dnssec(dnsresolver, domain_name):
 
@@ -21,12 +23,12 @@ def get_dnssec(dnsresolver, domain_name):
 
     # get the primarynameservers for the target domain
     response = dnsresolver.query(domain_name, dns.rdatatype.NS)
-    nsname = response.rrset[0] # name
+    nsname = response.rrset[0]  # name
     try:
         response = dnsresolver.query(str(nsname), dns.rdatatype.A)
     except:
         raise Exception("timeout")
-    nsaddr = response.rrset[0].to_text() # IPv4
+    nsaddr = response.rrset[0].to_text()  # IPv4
 
     # get the DNSKEY for the zone
     request = dns.message.make_query(domain_name,
@@ -34,7 +36,7 @@ def get_dnssec(dnsresolver, domain_name):
                                      want_dnssec=True)
 
     # send the query
-    response = dns.query.udp(request,nsaddr,timeout=1.0)
+    response = dns.query.udp(request, nsaddr, timeout=1.0)
     if response.rcode() != 0:
         raise Exception("get_dnssec_status: rcode was not 0")
     # the answer should contain both DNSKEY and RRSIG(DNSKEY)
@@ -49,7 +51,7 @@ def get_dnssec(dnsresolver, domain_name):
     name = dns.name.from_text(domain_name)
 
     try:
-        dns.dnssec.validate(answer[0],answer[1],{name:answer[0]})
+        dns.dnssec.validate(answer[0], answer[1], {name: answer[0]})
     except dns.dnssec.ValidationFailure:
         # an exception was raised
         raise Exception("get_dnssec_status: Failed validation.")
