@@ -1,3 +1,5 @@
+"""Project setup."""
+
 from subprocess import check_output
 
 from setuptools import find_packages, setup
@@ -13,6 +15,8 @@ setup(
     name='checkdnssec',
     version=version_from_git(),
     packages=find_packages(),
+    description="Verify if domain names use DNSSEC.",
+    long_description=open('README.md').read(),
     install_requires=[
         'dnspython',
         'pycrypto',
@@ -22,4 +26,6 @@ setup(
             'checkdnssec = checkdnssec:main',
         ],
     },
+    setup_requires=['pytest-runner'],
+    tests_require=['pytest'],
 )
