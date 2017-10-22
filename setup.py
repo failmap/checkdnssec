@@ -5,7 +5,7 @@ from subprocess import check_output
 def version_from_git():
     """Acquire package version form current git tag."""
     return check_output(['git', 'describe', '--tags', '--abbrev=0'],
-                        universal_newlines=True)
+                        universal_newlines=True).strip()
 
 
 setup(
