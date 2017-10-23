@@ -3,10 +3,9 @@ python:
 - 3.4
 - 3.6
 - 2.7
-- pypy3
-matrix:
-  allow_failures:
-  - pypy3
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install python-dev -yqq
 install: pip install tox-travis
 script: tox
 deploy:
